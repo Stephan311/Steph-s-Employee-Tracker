@@ -1,0 +1,23 @@
+{
+  "name": "steph-s-employee-tracker",
+  "version": "1.0.0",
+  "description": "Steph's Employee Tracker",
+  "main": "employeecode.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Stephan311/Steph-s-Employee-Tracker.git"
+  },
+  "author": "Stephan du Plooy",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Stephan311/Steph-s-Employee-Tracker/issues"
+  },
+  "homepage": "https://github.com/Stephan311/Steph-s-Employee-Tracker#readme",
+  "dependencies": {
+    "inquirer": "^8.0.0",
+    "mysql": "^2.18.1"
+  }
+}
