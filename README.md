@@ -4,6 +4,6 @@ In this assignment, I created an employee tracker that allows companies to keep 
 
 Link to Github Repo: https://github.com/Stephan311/Steph-s-Employee-Tracker
 
-Screen Recording of Program:
+Screen Recording of Program: https://d.pr/v/ndvFjX
 
 
