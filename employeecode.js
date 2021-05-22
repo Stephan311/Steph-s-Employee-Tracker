@@ -1,6 +1,7 @@
 // const inquirer = require('inquirer');
 const mysql = require('mysql');
 const inquirer = require('inquirer');
+const cTable = require('console.table');
 
 const connection = mysql.createConnection({
     host: 'localhost',
@@ -15,22 +16,6 @@ const connection = mysql.createConnection({
 
 });
 
-const afterConnection = () => {
-    connection.query(`SELECT name, department_id, title, salary, first_name, last_name, role_id, manager_id
-    FROM department
-    INNER JOIN role ON department.id = department_id
-    INNER JOIN employee ON department_id = manager_id;
-    `, (err, res) => {
-        if (err) throw (err);
-        res.forEach(({title, name, department_id, salary, first_name, last_name, role_id, manager_id}) => {
-            console.log(` |${title}| |${name}| |${department_id}| |${salary}| |${first_name}| |${last_name}| |${role_id}| |${manager_id}|`)
-        });
-        console.log("hello");
-        // connection.end();
-    });
-   afterConnection()  
-};
-
 //QUESTIONS for the employee
 
 const questions = () => {
@@ -39,7 +24,7 @@ const questions = () => {
         type: 'list',
         name: 'choice',
         message: 'What Do You Want to Do?',
-        choices: ['View All Employees', 'View All Roles', 'View All Departments', 'Add an Employee', 'Add a Department', 'Add a Role', 'Update a current role'],
+        choices: [ 'View Entire Company', 'View All Employees', 'View All Roles', 'View All Departments', 'Add an Employee', 'Add a Department', 'Add a Role', 'Update a current role'],
         validate: (answer)=>{ if(answer){return true} else {return 'Please enter an answer before proceeding'}}
     },
 ]).then((answer) => {
@@ -51,12 +36,31 @@ const questions = () => {
         addEmployee()
     } else if (answer.choice === 'Add a Department') {
         addDepartment()
-    } else if (answer.choice == 'View All Departments') {
+    } else if (answer.choice === 'View All Departments') {
         viewDepartments()
-    } else if (answer.choice == "Add a Role") {
+    } else if (answer.choice === "Add a Role") {
         addRole()
-    } 
+    } else if (answer.choice === "View All Roles") {
+        viewRoles()
+    } else if (answer.choice = "View Entire Company") {
+        afterConnection()
+    }
 })
+};
+
+const afterConnection = () => {
+    connection.query(`SELECT name, department_id, title, salary, first_name, last_name, role_id, manager_id
+    FROM department
+    INNER JOIN role ON department.id = department_id
+    INNER JOIN employee ON department_id = manager_id;
+    `, (err, res) => {
+        if (err) throw (err);
+        res.forEach(({title, name, department_id, salary, first_name, last_name, role_id, manager_id}) => {
+            console.log(` |${title}| |${name}| |${department_id}| |${salary}| |${first_name}| |${last_name}| |${role_id}| |${manager_id}|`)
+        });
+        // connection.end();
+    });
+   questions()  
 };
 
 const addRole = () => {
@@ -213,10 +217,20 @@ const upateRole = () => {
     }
 
 const viewEmployees = () => {
-    console.log("Viewing All Employees...\n");
+    console.table("Viewing All Employees...\n");
     connection.query('SELECT * FROM employee', (err, res) => {
         if (err) throw (err);
-        console.log(res);
+        console.table(res);
+    });
+    questions();
+
+}
+
+const viewRoles = () => {
+    console.log("Viewing All Employees...\n");
+    connection.query('SELECT * FROM role', (err, res) => {
+        if (err) throw (err);
+        console.table(res);
     });
     questions();
 
@@ -226,7 +240,7 @@ const viewDepartments = () => {
     console.log("Viewing All Departments...\n");
     connection.query('SELECT * FROM department', (err, res) => {
         if (err) throw (err);
-        console.log(res);
+        console.table(res);
     });
     questions();
 
@@ -243,7 +257,7 @@ const createoRole = () => {
         },
         (err, res) => {
             if (err) throw err;
-            console.log(`${res.affectedRows} role updated!!`)
+            console.table(`${res.affectedRows} role updated!!`)
         }
     )
 };
@@ -254,7 +268,7 @@ const createoRole = () => {
 
 connection.connect((err) => {
     if (err) throw err;
-    console.log(`connected as id ${connection.threadId}`);
+    console.table(`connected as id ${connection.threadId}`);
     createoRole();
 })
 
