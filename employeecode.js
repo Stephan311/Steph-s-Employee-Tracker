@@ -25,7 +25,6 @@ const questions = () => {
         name: 'choice',
         message: 'What Do You Want to Do?',
         choices: [ 'View Entire Company', 'View All Employees', 'View All Roles', 'View All Departments', 'Add an Employee', 'Add a Department', 'Add a Role', 'Update a current role'],
-        validate: (answer)=>{ if(answer){return true} else {return 'Please enter an answer before proceeding'}}
     },
 ]).then((answer) => {
     if (answer.choice === 'View All Employees') {
@@ -55,11 +54,9 @@ const afterConnection = () => {
     INNER JOIN employee ON department_id = manager_id;
     `, (err, res) => {
         if (err) throw (err);
-        res.forEach(({title, name, department_id, salary, first_name, last_name, role_id, manager_id}) => {
-            console.log(` |${title}| |${name}| |${department_id}| |${salary}| |${first_name}| |${last_name}| |${role_id}| |${manager_id}|`)
+            console.table(res)
         });
         // connection.end();
-    });
    questions()  
 };
 
@@ -165,7 +162,7 @@ const upateRole = () => {
                 }
             );
             
-            console.log(query.sql);    
+            console.table(query.sql);    
             questions();  
             
         })
@@ -260,6 +257,7 @@ const createoRole = () => {
             console.table(`${res.affectedRows} role updated!!`)
         }
     )
+    questions();
 };
 
 
@@ -268,8 +266,6 @@ const createoRole = () => {
 
 connection.connect((err) => {
     if (err) throw err;
-    console.table(`connected as id ${connection.threadId}`);
+    console.log(`connected as id ${connection.threadId}`);
     createoRole();
 })
-
-module.exports = questions()

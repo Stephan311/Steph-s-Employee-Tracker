@@ -5,7 +5,6 @@ USE employees_db;
 
 CREATE TABLE department (
 id INTEGER(20) AUTO_INCREMENT NOT NULL,
-department_id INTEGER(20),
 name VARCHAR(30) NOT NULL,
 PRIMARY KEY (id)
 );
@@ -15,7 +14,7 @@ PRIMARY KEY (id)
 -- DELETE FROM department WHERE id = 2;
 
 -- insert data into table columns
-INSERT INTO department (name, department_id) VALUE ("SLT", 1);
+INSERT INTO department (name) VALUE ("SLT");
 SELECT * FROM department;
 
 CREATE TABLE role (
@@ -28,6 +27,10 @@ PRIMARY KEY (id)
 
 INSERT INTO role (title, salary, department_id) VALUE ("CEO", 20, 1);
 SELECT * FROM role;
+
+SET SQL_SAFE_UPDATES = 0;
+-- UPDATE `role` SET `title` = "Pres" WHERE `department_id` = 1;
+		
 
 CREATE TABLE employee (
 id INTEGER(20) AUTO_INCREMENT NOT NULL,
@@ -42,6 +45,12 @@ INSERT INTO employee (first_name, last_name, role_id, manager_id)
  VALUE ("Stephan", "du Plooy", "1", "1");
 SELECT * FROM employee;
 
-SELECT name, first_name, last_name, role_id, manager_id 
-FROM department
-INNER JOIN employee ON department_id = employee.id;
+-- SELECT id, first_name, last_name, title, salary, role_id manager_id 
+-- FROM role
+-- INNER JOIN employee ON department_id = employee.id
+
+-- SELECT name, department_id, title, salary, first_name, last_name, role_id, manager_id
+-- FROM department
+-- INNER JOIN role ON department.id = department_id
+-- INNER JOIN employee ON department_id = manager_id;
+
