@@ -39,13 +39,34 @@ const upateRole = () => {
         return inquirer.prompt([
             {
                 type: 'input',
+                name: 'id',
+                message: 'What is the id of the employee?'
+            },
+            {
+                type: 'input',
                 name: 'title',
                 message: 'What title do you want to update to?'
             },
+            {
+                type: 'input',
+                name: 'salary',
+                message: 'What is this employees new salary?'
+            }
         ]).then((answers) => {
             console.log('Updating employees');
             const query = connection.query(
-                `UPDATE role SET title = ${answers.title} WHERE department_id = 1;`,
+                'UPDATE role SET ?, ? WHERE id = ?',
+                [
+                    {
+                    title: answers.title
+                    },
+                    {
+                    salary: answers.salary
+                    },
+                    {
+                    id: answers.id
+                    },
+                ],
                 (err, res) => {
                     if (err) throw (err);
                     console.log(`${res.affectedRows} role updated!\n`)
@@ -63,7 +84,7 @@ const upateRole = () => {
 const afterConnection = () => {
     connection.query(`SELECT id, first_name, last_name, title, salary, role_id manager_id 
     FROM role
-    INNER JOIN employee ON department_id = employee.id
+    INNER JOIN employee ON department_id = role_id
     `, (err, res) => {
         if (err) throw (err);
         res.forEach(({id, first_name, last_name, role_id, manager_id, title, salary}) => {
